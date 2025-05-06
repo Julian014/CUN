@@ -1,0 +1,22 @@
+{
+    "name": "Vianco App",
+    "short_name": "Vianco",
+    "description": "Aplicación de Vianco Te Transporta",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#90c9a7",
+    "icons": [
+      {
+        "src": "/imagenes/logo pestaña.PNG",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/imagenes/logo pestaña.PNG",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  

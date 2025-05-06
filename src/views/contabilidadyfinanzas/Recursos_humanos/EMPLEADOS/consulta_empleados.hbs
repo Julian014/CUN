@@ -1,0 +1,436 @@
+<html>
+<head>
+    <title>Benefits</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="bg-gray-800 text-white w-64 space-y-6 py-7 px-2">
+            <div class="text-center text-2xl font-semibold">Vianco</div>
+            <nav class="space-y-1">
+             
+                <div>
+               
+                    <div class="pl-8 space-y-1">
+                        <a class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 bg-gray-700" href="#">
+                            <i class="fas fa-database mr-3"></i> Consultar colaborador 
+                        </a>
+                        <a class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700" href="#">
+                            <i class="fas fa-briefcase mr-3"></i> Horario
+                        </a>
+                        <a class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700" href="#">
+                            <i class="fas fa-cogs mr-3"></i> Documentacion
+                        </a>
+                        <a class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700" href="#">
+                            <i class="fas fa-dollar-sign mr-3"></i> Salario
+                        </a>
+                     
+                   
+                     
+                        <a class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700" href="#">
+                            <i class="fas fa-exclamation-triangle mr-3"></i> Actos diciplinarios
+                        </a>
+                        <a class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700" href="#">
+                            <i class="fas fa-stethoscope mr-3"></i> Examenes medicos
+                        </a>
+                    
+                     
+                    </div>
+                </div>
+            
+                <a class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700" href="#">
+<a href="/menucontabilidad">
+    <i class="fas fa-arrow-left mr-3"></i> Volver al menú
+</a>
+                </a>
+            </nav>
+        </div>
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col">
+            <!-- Header -->
+<header class="bg-[#90c9a7] text-white py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <button class="text-white focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="text-xl font-semibold">COLABORADORES</h1>
+<select id="empleadoSelect" name="empleado" class="text-sm bg-transparent border border-gray-400 focus:outline-none text-white select2">
+    
+    <option value="" disabled selected class="text-black">Seleccione un empleado</option>
+    {{#each nombresUsuarios}}
+        <option value="{{this}}" class="text-black">{{this}}</option>
+    {{/each}}
+</select>
+
+<button id="buscarEmpleado" class="bg-blue-500 text-white px-4 py-2 rounded ml-2 hover:bg-blue-600">
+    Buscar
+</button>
+
+
+                </div>
+
+<div id="empleadoInfo" class="mt-6 bg-white p-6 rounded-lg shadow-md hidden">
+
+
+    
+            </header>
+            <!-- Content -->
+            <main class="flex-1 bg-gray-100 p-6">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center space-x-6">
+<img id="profilePicture" alt="User profile picture" class="rounded-full" height="150" width="120" />                
+
+
+        <div>
+                            <h2 class="text-xl font-semibold"> <span id="name"   contenteditable="false" ></span></h2>
+                            <p class="text-gray-600">Salario</p>
+<p class="text-gray-800">$ <span id="salario" contenteditable="false"></span></p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Compañia</p>
+                            <p class="text-gray-800">VIANCO TE TRANSPORTA</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600"> Email</p>
+                            <p class="text-blue-600"> <span id="email"  contenteditable="false"  ></span> </p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">fecha nacimiento</p>
+                            <p class="text-gray-800">  <span id="fecha_nacimiento"   contenteditable="false" ></span>  </p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Cel coorporativo</p>
+                            <p class="text-blue-600"> <span id="phone_number"  contenteditable="false" ></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 bg-white p-6 rounded-lg shadow-md">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-blue-900">INFORMACION</h3>
+                            <div class="mt-4 space-y-4">
+                               <div>
+                    <label class="block text-gray-600">Tipo de documento</label>
+                    <span class="w-full border border-gray-300 rounded px-3 py-2 block bg-gray-100"><span id="tipo_documento"  contenteditable="false"  ></span></span>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-600">Fecha de ingreso</label>
+                    <span class="w-full border border-gray-300 rounded px-3 py-2 block bg-gray-100"> <span id="fecha_ingreso" contenteditable="false"  ></span> </span>
+                </div>
+                           <div>
+                    <label class="block text-gray-600">Eps</label>
+                    <span class="w-full border border-gray-300 rounded px-3 py-2 block bg-gray-100">    <span id="eps"  contenteditable="false"  ></span>    </span>
+                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-blue-900">BENEFITS</h3>
+                            <div class="mt-4 space-y-4">
+                                             <div>
+                    <label class="block text-gray-600">N° de documento</label>
+                    <span class="w-full border border-gray-300 rounded px-3 py-2 block bg-gray-100"><span id="numero_documento" contenteditable="false"  ></span></span>
+                </div>
+
+                   <div>
+                    <label class="block text-gray-600">Arl</label>
+                    <span class="w-full border border-gray-300 rounded px-3 py-2 block bg-gray-100"><span id="arl" contenteditable="false"  ></span></span>
+                </div>
+                                 <div>
+                    <label class="block text-gray-600">Cargo</label>
+                    <span class="w-full border border-gray-300 rounded px-3 py-2 block bg-gray-100"><span id="cargo"  contenteditable="false"  ></span></span>
+                </div>
+                             
+                            </div>
+                        </div>
+                    </div>
+                <div class="mt-6">
+    <h3 class="text-lg font-semibold text-blue-900">Cursos y certificaciones</h3>
+    <ul class="text-gray-600 mt-2 list-disc list-inside">
+        <li>  <span id="certificacion_1"  contenteditable="false"  ></span> </li>
+          <li>  <span id="certificacion_2"  contenteditable="false"  ></span> </li>
+        <li>  <span id="certificacion_3"  contenteditable="false"  ></span> </li>
+
+    </ul>
+</div>
+
+                </div>
+
+
+
+   <div class="mt-6 bg-white p-6 rounded-lg shadow-md">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-blue-900">Contacto</h3>
+                            <div class="mt-4 space-y-4">
+                               <div>
+                    <label class="block text-gray-600">Nombre</label>
+                    <span class="w-full border border-gray-300 rounded px-3 py-2 block bg-gray-100"><span id="nombre_emergencia"  contenteditable="false"  ></span></span>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-600">celular</label>
+                    <span class="w-full border border-gray-300 rounded px-3 py-2 block bg-gray-100"> <span id="contacto_emergencia" contenteditable="false"  ></span> </span>
+                </div>
+             
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-blue-900">Emergecia</h3>
+                            <div class="mt-4 space-y-4">
+                                             <div>
+                    <label class="block text-gray-600">parentesco</label>
+                    <span class="w-full border border-gray-300 rounded px-3 py-2 block bg-gray-100"><span id="numero_documento" contenteditable="false"  ></span></span>
+                </div>
+
+                  
+                 
+                             
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                 
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="mt-6 flex justify-between">
+                    <div class="flex space-x-4">
+<button id="editarBtn" class="bg-gray-200 text-gray-800 px-4 py-2 rounded shadow hover:bg-gray-300">Editar</button>                    </div>
+                    <div class="flex space-x-4">
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+
+    </div>
+
+
+    <div id="loadingOverlay" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center hidden">
+    <div class="text-white text-2xl">
+        <i class="fas fa-spinner fa-spin"></i> Cargando...
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+    $(document).ready(function() {
+        $('#empleadoSelect').select2({
+            placeholder: "Seleccione un empleado",
+            allowClear: true
+        });
+    });
+</script>
+
+<script>
+document.getElementById("buscarEmpleado").addEventListener("click", function() {
+    const selectedUser = document.getElementById("empleadoSelect").value;
+    if (!selectedUser) {
+        alert("Seleccione un empleado");
+        return;
+    }
+
+    // Mostrar pantalla de carga
+    document.getElementById("loadingOverlay").classList.remove("hidden");
+
+
+    fetch(`/getUserData?name=${encodeURIComponent(selectedUser)}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data); // Verificar los datos obtenidos
+            if (data) {
+                const nameElem = document.getElementById("name");
+                const emailElem = document.getElementById("email");
+                const phoneElem = document.getElementById("phone_number");
+                const cargoElem = document.getElementById("cargo");
+                const clienteIdElem = document.getElementById("cliente_id");
+                const ciudadElem = document.getElementById("ciudad");
+                const salarioElem = document.getElementById("salario");
+                const arlElem = document.getElementById("arl");
+                const epsElem = document.getElementById("eps");              
+                const tipoDocumentoElem = document.getElementById("tipo_documento");
+                const numeroDocumentoElem = document.getElementById("numero_documento");
+                const nombreEmergenciaElem = document.getElementById("nombre_emergencia");
+                const contactoEmergenciaElem = document.getElementById("contacto_emergencia");
+                const profilePicture = document.getElementById("profilePicture");
+                const empleadoInfo = document.getElementById("empleadoInfo");
+                const fecha_ingresoElem = document.getElementById("fecha_ingreso");
+                const fecha_nacimientoElem = document.getElementById("fecha_nacimiento");
+
+                const certificacion_1Elem = document.getElementById("certificacion_1");
+                const certificacion_2Elem = document.getElementById("certificacion_2");
+                const certificacion_3Elem = document.getElementById("certificacion_3");
+
+
+
+                if (nameElem) nameElem.innerText = data.name || "N/A";
+                if (emailElem) emailElem.innerText = data.email || "N/A";
+                if (phoneElem) phoneElem.innerText = data.phone_number || "N/A";
+                if (cargoElem) cargoElem.innerText = data.cargo || "N/A";
+if (fecha_ingresoElem && data.fecha_ingreso) {
+    const fecha = new Date(data.fecha_ingreso);
+    const opciones = { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'America/Bogota' };
+    fecha_ingresoElem.innerText = fecha.toLocaleDateString('es-CO', opciones);
+}
+
+
+
+
+if (fecha_nacimientoElem && data.fecha_nacimiento) {
+    const fecha = new Date(data.fecha_nacimiento);
+    const opciones = { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'America/Bogota' };
+    fecha_nacimientoElem.innerText = fecha.toLocaleDateString('es-CO', opciones);
+}
+
+
+
+
+
+                if (certificacion_1Elem) certificacion_1Elem.innerText = data.certificacion_1 || "N/A";
+                if (certificacion_2Elem) certificacion_2Elem.innerText = data.certificacion_2 || "N/A";
+                if (certificacion_3Elem) certificacion_3Elem.innerText = data.certificacion_3 || "N/A";
+
+
+                if (clienteIdElem) clienteIdElem.innerText = data.cliente_id || "N/A";
+                if (ciudadElem) ciudadElem.innerText = data.ciudad || "N/A";
+                if (salarioElem) salarioElem.innerText = data.salario || "N/A";
+                if (arlElem) arlElem.innerText = data.arl || "N/A";
+                if (epsElem) epsElem.innerText = data.eps || "N/A";
+                if (tipoDocumentoElem) tipoDocumentoElem.innerText = data.tipo_documento || "N/A";
+                if (numeroDocumentoElem) numeroDocumentoElem.innerText = data.numero_documento || "N/A";
+                if (nombreEmergenciaElem) nombreEmergenciaElem.innerText = data.nombre_emergencia || "N/A";
+                if (contactoEmergenciaElem) contactoEmergenciaElem.innerText = data.contacto_emergencia || "N/A";
+
+                // Validar la existencia del elemento de la imagen
+                   if (profilePicture) {
+                    profilePicture.src = data.profile_picture_url || "ruta/a/imagen/por/defecto.png";
+                }
+
+                if (empleadoInfo) empleadoInfo.classList.remove("hidden");
+            }
+        })
+       .catch(error => {
+            console.error("Error al obtener datos:", error);
+            alert("Hubo un problema al obtener la información.");
+        })
+        .finally(() => {
+            // Ocultar pantalla de carga
+            document.getElementById("loadingOverlay").classList.add("hidden");
+        });
+});
+</script>
+<script>
+function convertirFecha(fechaTexto) {
+    const meses = {
+        "enero": "01", "febrero": "02", "marzo": "03", "abril": "04",
+        "mayo": "05", "junio": "06", "julio": "07", "agosto": "08",
+        "septiembre": "09", "octubre": "10", "noviembre": "11", "diciembre": "12"
+    };
+
+    const partes = fechaTexto.split(" de ");
+    if (partes.length === 3) {
+        const dia = partes[0].padStart(2, "0");
+        const mes = meses[partes[1].toLowerCase()];
+        const año = partes[2];
+        return `${año}-${mes}-${dia}`;
+    }
+    return null; // Si el formato no es válido
+}
+
+document.getElementById("editarBtn").addEventListener("click", function() {
+    const editables = document.querySelectorAll("[contenteditable]");
+    const isEditing = this.textContent === "Editar";
+
+    if (isEditing) {
+        // Activar modo de edición
+        editables.forEach(element => {
+            element.contentEditable = true;
+            element.style.backgroundColor = "#f0f0f0";
+        });
+        this.textContent = "Guardar";
+        this.classList.remove("bg-gray-200");
+        this.classList.add("bg-green-500", "text-white");
+    } else {
+        // Desactivar modo de edición y guardar cambios
+        editables.forEach(element => {
+            element.contentEditable = false;
+            element.style.backgroundColor = "";
+        });
+        this.textContent = "Editar";
+        this.classList.remove("bg-green-500", "text-white");
+        this.classList.add("bg-gray-200");
+
+        // Recopilar los datos actualizados
+        const updatedData = {
+            name: document.getElementById("name").innerText,
+            salario: document.getElementById("salario").innerText,
+            email: document.getElementById("email").innerText,
+            fecha_nacimiento: convertirFecha(document.getElementById("fecha_nacimiento").innerText),
+            phone_number: document.getElementById("phone_number").innerText,
+            cargo: document.getElementById("cargo").innerText,
+            arl: document.getElementById("arl").innerText,
+            eps: document.getElementById("eps").innerText,
+            tipo_documento: document.getElementById("tipo_documento").innerText,
+            numero_documento: document.getElementById("numero_documento").innerText,
+            nombre_emergencia: document.getElementById("nombre_emergencia").innerText,
+            contacto_emergencia: document.getElementById("contacto_emergencia").innerText,
+            certificacion_1: document.getElementById("certificacion_1").innerText,
+            certificacion_2: document.getElementById("certificacion_2").innerText,
+            certificacion_3: document.getElementById("certificacion_3").innerText,
+        };
+
+        // Validar que la fecha se haya convertido correctamente
+        if (!updatedData.fecha_nacimiento) {
+            alert("Formato de fecha no válido. Use el formato 'día de mes de año' (ej: 24 de mayo de 2004).");
+            return;
+        }
+
+        // Enviar los datos actualizados al servidor
+        fetch("/updateUserData", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Datos actualizados correctamente");
+            } else {
+                alert("Hubo un error al actualizar los datos");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Hubo un problema al guardar los cambios.");
+        });
+    }
+});
+</script>
+
+</body>
+</html>

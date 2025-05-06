@@ -1,0 +1,224 @@
+<!-- Estilos CSS añadidos -->
+<style>
+    body {
+
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7fc;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Estilos generales del contenedor */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    /* Estilos de los botones de navegación */
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+    .button-container a {
+        text-decoration: none;
+    }
+    .button-container button {
+        background-color: #90c9a7;
+        color: white;
+        padding: 12px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .button-container button:hover {
+        background-color: #d9d9d9;
+        transform: translateY(-3px);
+    }
+
+    .button-container button:focus {
+        outline: none;
+    }
+
+.button-container button.active {
+    background-color: #d9d9d9; /* Un tono más oscuro */
+    transform: translateY(3px); /* Simula estar presionado */
+    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra interna */
+}
+
+.button-container a.active button {
+    background-color: #0056b3; /* Un tono más oscuro */
+    transform: translateY(3px); /* Simula estar presionado */
+    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra interna */
+}
+</style>
+
+<style>
+    .stats-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #6c757d; /* Color gris oscuro */
+        color: white;
+        padding: 12px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .stats-button:hover {
+        background-color: #5a6268; /* Color más oscuro al pasar el mouse */
+        transform: translateY(-3px);
+    }
+
+    .stats-button i {
+        margin-right: 8px; /* Espaciado entre el ícono y el texto */
+        font-size: 18px;
+    }
+</style>
+
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<!-- Contenedor principal -->
+<div class="container">
+    <!-- Botones de navegación -->
+<div class="button-container">
+    <a href="/reporte_horario">
+        <button class="active" type="button">Horarios Ejecutivos</button>
+    </a>
+    <a href="/registrollegadas">
+        <button type="button">Horarios Administrativo</button>
+    </a>
+    <a href="/estadisticas_horario">
+        <button type="button" class="stats-button">
+            <i class="fa fa-chart-bar"></i> Estadísticas
+        </button>
+    </a>
+</div>
+
+
+
+
+    {{#if navopertaivo}}
+    <nav>
+        <h1>Bienvenido, {{nombreUsuario}}</h1>
+    </nav>
+    {{/if}}
+
+    <main>
+        <h2>Estadísticas de Horarios</h2>
+
+        <!-- Formulario para seleccionar el rango de fechas -->
+<form id="rangoFechasForm" action="/estadisticas_horario" method="POST">
+    <label for="fechaInicio">Fecha Inicio:</label>
+    <input type="date" id="fechaInicio" name="fechaInicio" value="{{fechaInicio}}" required>
+
+    <label for="fechaFin">Fecha Fin:</label>
+    <input type="date" id="fechaFin" name="fechaFin" value="{{fechaFin}}" required>
+
+    <button type="submit">Consultar</button>
+</form>
+
+
+        <!-- Tabla de resultados -->
+     <table id="resultadosTabla" border="1">
+    <thead>
+        <tr>
+            <th>ID Usuario</th>
+            <th>Fecha</th>
+            <th>Horas Trabajadas (Diarias)</th>
+            <th>Total Horas Trabajadas</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each registros}}
+        <tr>
+            <td>{{this.user_id}}</td>
+            <td>{{this.fecha_inicio}}</td>
+            <td class="horas-diarias"></td> <!-- Aquí se calcularán las horas diarias -->
+            <td class="total-horas"></td>   <!-- Aquí se calcularán las horas totales por usuario -->
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+    </main>
+
+    <script>
+        // Función para calcular la diferencia entre dos horas
+      // Función para calcular la diferencia entre dos horas
+function calcularHoras(horaInicio, horaFinal) {
+    const inicio = horaInicio.split(':');
+    const fin = horaFinal.split(':');
+
+    const inicioDate = new Date(1970, 0, 1, inicio[0], inicio[1], inicio[2]);
+    const finDate = new Date(1970, 0, 1, fin[0], fin[1], fin[2]);
+
+    // Si la hora de finalización es menor que la de inicio, asumimos que el trabajo pasó de un día a otro
+    if (finDate < inicioDate) {
+        finDate.setDate(finDate.getDate() + 1);
+    }
+
+    return (finDate - inicioDate) / 1000 / 60 / 60; // Devuelve el valor en horas
+}
+        // Procesar los datos y realizar los cálculos
+function procesarDatos(registros) {
+    const horasTotalesPorUsuario = {};
+
+    registros.forEach(registro => {
+        const horasTrabajadas = calcularHoras(registro.hora_inicio, registro.hora_final);
+        const fecha = new Date(registro.fecha_inicio);
+        const userId = registro.user_id;
+
+        // Calcular horas diarias
+        const filas = document.querySelectorAll('#resultadosTabla tbody tr');
+        filas.forEach(fila => {
+            if (fila.cells[0].textContent === String(userId) && fila.cells[1].textContent === fecha.toISOString().split('T')[0]) {
+                fila.querySelector('.horas-diarias').textContent = horasTrabajadas.toFixed(2);
+            }
+        });
+
+        // Calcular total de horas por usuario
+        if (!horasTotalesPorUsuario[userId]) {
+            horasTotalesPorUsuario[userId] = 0;
+        }
+        horasTotalesPorUsuario[userId] += horasTrabajadas;
+    });
+
+    // Mostrar el total de horas trabajadas por usuario
+    const filas = document.querySelectorAll('#resultadosTabla tbody tr');
+    filas.forEach(fila => {
+        const userId = fila.cells[0].textContent;
+        if (horasTotalesPorUsuario[userId]) {
+            fila.querySelector('.total-horas').textContent = horasTotalesPorUsuario[userId].toFixed(2);
+        }
+    });
+}
+
+
+        // Obtener los datos desde el backend
+        document.addEventListener('DOMContentLoaded', () => {
+            const registros = {{json registros}}; // Handlebars pasa los registros a JavaScript
+
+            // Procesar los datos al cargar la página
+            procesarDatos(registros);
+
+            // Filtrar por fecha cuando se envíe el formulario
+            document.getElementById('rangoFechasForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const fechaInicio = document.getElementById('fechaInicio').value;
+                const fechaFin = document.getElementById('fechaFin').value;
+
+                const registrosFiltrados = registros.filter(registro => {
+                    const fecha = new Date(registro.fecha_inicio);
+                    return fecha >= new Date(fechaInicio) && fecha <= new Date(fechaFin);
+                });
+
+                procesarDatos(registrosFiltrados);
+            });
+        });
+    </script>
+

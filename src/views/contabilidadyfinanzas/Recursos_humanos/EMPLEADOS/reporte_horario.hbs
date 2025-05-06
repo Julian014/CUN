@@ -1,0 +1,466 @@
+<!-- Estilos CSS añadidos -->
+<style>
+    body {
+
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7fc;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Estilos generales del contenedor */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+
+
+
+
+
+
+
+
+
+    /* Estilos de los botones de navegación */
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .button-container a {
+        text-decoration: none;
+    }
+
+    .button-container button {
+        background-color: #90c9a7;
+        color: white;
+        padding: 12px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .button-container button:hover {
+        background-color: #d9d9d9;
+        transform: translateY(-3px);
+    }
+
+    .button-container button:focus {
+        outline: none;
+    }
+
+.button-container button.active {
+    background-color: #d9d9d9; /* Un tono más oscuro */
+    transform: translateY(3px); /* Simula estar presionado */
+    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra interna */
+}
+
+.button-container a.active button {
+    background-color: #0056b3; /* Un tono más oscuro */
+    transform: translateY(3px); /* Simula estar presionado */
+    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra interna */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /* Estilos del formulario */
+    #filterForm {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #filterForm label {
+        font-size: 16px;
+        color: #333;
+    }
+
+    #filterForm input {
+        padding: 8px 12px;
+        font-size: 16px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        width: 200px;
+        margin-right: 20px;
+    }
+
+    #filterForm button {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: white;
+        background-color: #28a745;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    #filterForm button:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+    }
+
+    /* Estilos de la tabla */
+    #reportTable {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+    }
+
+    #reportTable th, #reportTable td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    #reportTable th {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+    }
+
+    #reportTable tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    #reportTable tr:hover {
+        background-color: #f1f1f1;
+        cursor: pointer;
+    }
+
+    .dataRow {
+        transition: background-color 0.3s ease;
+    }
+
+    .dataRow:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Estilo para las celdas de fecha */
+    .dataRow td {
+        font-size: 14px;
+        color: #333;
+    }
+.dataRow td {
+    transition: background-color 0.3s ease;
+}
+.hover-info {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    display: none;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+</style>
+
+<style>
+    .stats-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #6c757d; /* Color gris oscuro */
+        color: white;
+        padding: 12px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .stats-button:hover {
+        background-color: #5a6268; /* Color más oscuro al pasar el mouse */
+        transform: translateY(-3px);
+    }
+
+    .stats-button i {
+        margin-right: 8px; /* Espaciado entre el ícono y el texto */
+        font-size: 18px;
+    }
+</style>
+
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<!-- Contenedor principal -->
+<div class="container">
+
+
+
+
+    <!-- Botones de navegación -->
+<div class="button-container">
+    <a href="/reporte_horario">
+        <button class="active" type="button">Horarios Ejecutivos</button>
+    </a>
+    <a href="/registrollegadas">
+        <button type="button">Horarios Administrativo</button>
+    </a>
+    <a href="/estadisticas_horario">
+        <button type="button" class="stats-button">
+            <i class="fa fa-chart-bar"></i> Estadísticas
+        </button>
+    </a>
+</div>
+
+
+
+
+
+
+    <!-- Formulario de filtro -->
+    <form id="filterForm">
+        <label for="fecha_inicio">Fecha de Inicio:</label>
+        <input type="date" id="fecha_inicio" name="fecha_inicio">
+        <button type="submit">Filtrar</button>
+    </form>
+<div id="hoverContainer" class="hover-info"></div>
+
+    <!-- Tabla de reporte -->
+    <table id="reportTable">
+ <thead>
+    <tr>
+        <th>ID</th>
+        <th> id-user</th>
+        <th>Nombre</th>
+        <th>Fecha Inicio</th>
+        <th>Hora de inicio</th>
+        <th>Fecha Cierre</th>
+        <th>Hora Final</th>
+        <th>Horas Trabajadas</th> <!-- Nueva columna -->
+    </tr>
+</thead>
+<tbody>
+    {{#each reporte}}
+    <tr class="dataRow">
+        <td>{{this.id}}</td>
+        <td>{{this.user_id }}</td>
+        <td>{{this.nombre_usuario}}</td>
+        <td>{{formatDate this.fecha_inicio}}</td>
+        <td>{{this.hora_inicio}}</td>
+        <td>{{formatDate this.fecha_cierre}}</td>
+        <td>{{this.hora_final}}</td>
+        <td class="horasTrabajadas"></td> <!-- Nueva celda para las horas -->
+    </tr>
+    {{/each}}
+</tbody>
+
+    </table>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Filtrar por fecha
+    document.getElementById('filterForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const fechaInicio = new Date(document.getElementById('fecha_inicio').value);
+        const rows = document.querySelectorAll('.dataRow');
+
+        rows.forEach(row => {
+            const fechaTexto = row.cells[3].textContent.trim();
+            const fechaRow = new Date(fechaTexto);
+
+            row.style.display = fechaInicio.toDateString() === fechaRow.toDateString() ? '' : 'none';
+        });
+    });
+
+    // Calcular horas trabajadas
+    const calcularHorasTrabajadas = () => {
+        const rows = document.querySelectorAll('.dataRow');
+
+        rows.forEach(row => {
+            const horaInicio = row.cells[4].textContent;
+            const horaFinal = row.cells[6].textContent;
+
+            if (horaInicio && horaFinal) {
+                const [hInicio, mInicio] = horaInicio.split(':').map(Number);
+                const [hFinal, mFinal] = horaFinal.split(':').map(Number);
+
+                const inicio = new Date(0, 0, 0, hInicio, mInicio);
+                const final = new Date(0, 0, 0, hFinal, mFinal);
+
+                const diferencia = final - inicio;
+                const horas = Math.floor(diferencia / (1000 * 60 * 60));
+                const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+
+                row.cells[7].textContent = `${horas}h ${minutos}m`;
+            } else {
+                row.cells[7].textContent = 'N/A';
+            }
+        });
+    };
+
+    calcularHorasTrabajadas();
+});
+</script>
+
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+    const hoverContainer = document.getElementById('hoverContainer');
+
+    document.querySelectorAll('.dataRow td:nth-child(5), .dataRow td:nth-child(7)').forEach(cell => {
+        cell.addEventListener('mouseenter', function (event) {
+            const { title } = event.target;
+            if (title) {
+                hoverContainer.textContent = title;
+                hoverContainer.style.display = 'block';
+                hoverContainer.style.top = `${event.pageY + 10}px`;
+                hoverContainer.style.left = `${event.pageX + 10}px`;
+            }
+        });
+
+        cell.addEventListener('mousemove', function (event) {
+            hoverContainer.style.top = `${event.pageY + 10}px`;
+            hoverContainer.style.left = `${event.pageX + 10}px`;
+        });
+
+        cell.addEventListener('mouseleave', function () {
+            hoverContainer.style.display = 'none';
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Obtener todas las filas de la tabla
+    const rows = document.querySelectorAll('.dataRow');
+
+    // Mapear días de la semana
+    const diasSemana = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+
+    rows.forEach(row => {
+        const fechaInicioText = row.cells[3].textContent; // Fecha Inicio
+        const horaInicioText = row.cells[4].textContent; // Hora de inicio
+        const horaFinalText = row.cells[6].textContent; // Hora final
+        const userId = row.cells[1].textContent; // Obtener el user_id de la celda correspondiente
+
+        if (fechaInicioText) {
+            // Convertir la fecha a un objeto Date
+            const [year, month, day] = fechaInicioText.split('-');
+            const fecha = new Date(year, month - 1, day); // Usamos la fecha como está, sin UTC
+
+            // Obtener el día de la semana
+            const diaSemana = diasSemana[fecha.getDay()];
+
+            // Log para ver qué fecha y día de la semana se está usando
+            console.log(`Fecha de inicio: ${fechaInicioText} -> Fecha sin ajuste: ${fecha}, Día de la semana: ${diaSemana}`);
+
+            // Reemplazar caracteres especiales en el nombre del día de la semana para la URL
+            const diaSemanaCodificado = diaSemana.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Elimina acentos
+
+            // Realizar la solicitud fetch con el userId obtenido
+            fetch(`/api/horarios/${diaSemanaCodificado.toLowerCase()}/${userId}`)
+                .then(response => response.json())
+                .then(horarios => {
+                    const { entrada, salida } = horarios; // Horarios esperados
+
+                    // Verificar y colorear hora de inicio
+                    validarHora(horaInicioText, entrada, row.cells[4]);
+
+                    // Verificar y colorear hora final
+                    validarHora(horaFinalText, salida, row.cells[6]);
+                })
+                .catch(error => {
+                    console.error('Error al cargar horarios:', error);
+                });
+        }
+    });
+});
+
+
+
+
+
+/**
+ * Valida una hora con respecto al horario esperado y colorea la celda.
+ * @param {string} horaReal - Hora registrada (HH:mm).
+ * @param string} horaEsperada - Hora esperada (HH:mm).
+ * @param {HTMLElement} celda - Celda de la tabla a colorear.
+ */
+
+
+
+
+
+
+
+function validarHora(horaReal, horaEsperada, celda) {
+    if (!horaReal || !horaEsperada) {
+        celda.style.backgroundColor = '#f1f1f1'; // Gris claro si falta la hora
+        celda.title = "Información no disponible";
+        return;
+    }
+
+    // Normalizar las horas
+    const normalizarHora = (hora) => {
+        const [h, m] = hora.split(':').map(Number);
+        return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+    };
+
+    horaReal = normalizarHora(horaReal);
+    horaEsperada = normalizarHora(horaEsperada);
+
+    // Convertir a milisegundos
+    const [realHoras, realMinutos] = horaReal.split(':').map(Number);
+    const [esperadasHoras, esperadasMinutos] = horaEsperada.split(':').map(Number);
+
+    const horaRealMs = new Date(0, 0, 0, realHoras, realMinutos).getTime();
+    const horaEsperadaMs = new Date(0, 0, 0, esperadasHoras, esperadasMinutos).getTime();
+
+    const diferenciaMin = (horaRealMs - horaEsperadaMs) / (1000 * 60); // Diferencia en minutos
+
+    // Configurar el título (tooltip) con información detallada
+    const estado = diferenciaMin > 0
+        ? `Tarde por ${Math.abs(diferenciaMin)} minutos`
+        : `Temprano por ${Math.abs(diferenciaMin)} minutos`;
+    celda.title = `Hora esperada: ${horaEsperada}\nHora registrada: ${horaReal}\n${estado}`;
+
+    // Cambiar color según diferencia
+    if (diferenciaMin <= 5 && diferenciaMin >= -5) {
+        celda.style.backgroundColor = 'green';
+        celda.style.color = 'white';
+    } else if (diferenciaMin > 5 && diferenciaMin <= 15) {
+        celda.style.backgroundColor = 'yellow';
+    } else if (diferenciaMin > 15) {
+        celda.style.backgroundColor = 'red';
+        celda.style.color = 'white';
+    } else {
+        celda.style.backgroundColor = 'blue';
+        celda.style.color = 'white';
+    }
+}
+
+
+</script>

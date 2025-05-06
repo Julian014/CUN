@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Turno</title>
+</head>
+<body>
+    <h1>Bienvenido, {{nombreUsuario}}</h1>
+    <form id="turnoForm" action="/iniciar-turno" method="POST">
+        <input type="hidden" name="ssid" id="ssidInput" value="">
+        <button type="button" onclick="startTurn()">Iniciar Turno</button>
+    </form>
+
+    <script>
+        function startTurn() {
+            // Aquí debes obtener el SSID de alguna manera
+            const ssid = prompt('Introduce el SSID de la red Wi-Fi');
+
+            if (ssid) {
+                document.getElementById('ssidInput').value = ssid;
+                document.getElementById('turnoForm').submit();
+            }
+        }
+    </script>
+</body>
+</html>

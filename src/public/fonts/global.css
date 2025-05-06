@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'avenir';
+    src: url('/fonts/avenir-next-medium.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body, html, * {
+    font-family: 'avenir', sans-serif;
+}

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Horarios</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .button-container a button {
+            background-color: #90c9a7;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .button-container button:hover {
+            background-color: #75a88c;
+            transform: translateY(-3px);
+        }
+
+        .stats-button {
+            background-color: #6c757d !important;
+        }
+
+        .stats-button:hover {
+            background-color: #5a6268 !important;
+        }
+
+        /* Estilos del formulario de filtro */
+        .filter-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .filter-group input {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* Estilos de la tabla */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #ffffff;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Contenedor principal -->
+<div class="container">
+    <!-- Botones de navegación -->
+    <div class="button-container">
+        <a href="/reporte_horario">
+            <button type="button">Horarios Ejecutivos</button>
+        </a>
+        <a href="/registrollegadas">
+            <button type="button" class="active">Horarios Administrativos</button>
+        </a>
+        <a href="/estadisticas_horario">
+            <button type="button" class="stats-button">
+                <i class="fa fa-chart-bar"></i> Estadísticas
+            </button>
+        </a>
+    </div>
+
+    <!-- Formulario de filtro -->
+    <div class="filter-container">
+        <div class="filter-group">
+            <label for="fechaFiltro">Filtrar por Fecha:</label>
+            <input type="date" id="fechaFiltro" onchange="aplicarFiltroFecha()">
+        </div>
+    </div>
+
+    <!-- Botones para mostrar llegadas o salidas -->
+    <div class="btn-group">
+        <button class="btn" onclick="mostrarLlegadas()">Ver Llegadas</button>
+        <button class="btn" onclick="mostrarSalidas()">Ver Salidas</button>
+    </div>
+
+    <!-- Tabla de Llegadas -->
+    <table id="tablaLlegadas">
+        <thead>
+            <tr>
+                <th>ID Llegada</th>
+                <th>Nombre Llegada</th>
+                <th>Fecha Inicio</th>
+                <th>Hora Inicio</th>
+            </tr>
+        </thead>
+        <tbody id="registrosLlegadas">
+            {{#each registros}}
+            <tr data-fecha="{{this.fecha_inicio}}">
+                <td>{{this.id_llegada}}</td>
+                <td>{{this.nombre_llegada}}</td>
+                <td>{{this.fecha_inicio}}</td>
+                <td>{{this.hora_inicio}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <!-- Tabla de Salidas -->
+    <table id="tablaSalidas" style="display:none">
+        <thead>
+            <tr>
+                <th>ID Salida</th>
+                <th>Nombre Salida</th>
+                <th>Fecha Fin</th>
+                <th>Hora Fin</th>
+            </tr>
+        </thead>
+        <tbody id="registrosSalidas">
+            {{#each registros}}
+            <tr data-fecha="{{this.fecha_fin}}">
+                <td>{{this.id_salida}}</td>
+                <td>{{this.nombre_salida}}</td>
+                <td>{{this.fecha_fin}}</td>
+                <td>{{this.hora_fin}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+    <script>
+        function aplicarFiltroFecha() {
+            const fechaFiltro = document.getElementById('fechaFiltro').value; // formato yyyy-mm-dd
+            const filasLlegadas = document.querySelectorAll('#registrosLlegadas tr');
+            const filasSalidas = document.querySelectorAll('#registrosSalidas tr');
+
+            // Si no hay fecha seleccionada, mostrar todas las filas
+            if (!fechaFiltro) {
+                filasLlegadas.forEach(fila => fila.style.display = '');
+                filasSalidas.forEach(fila => fila.style.display = '');
+                return;
+            }
+
+            const fechaFiltroFormateada = formatearFecha(fechaFiltro);
+
+            // Filtrar llegadas
+            filasLlegadas.forEach(fila => {
+                const fechaInicio = fila.getAttribute('data-fecha');
+                fila.style.display = fechaInicio === fechaFiltroFormateada ? '' : 'none';
+            });
+
+            // Filtrar salidas
+            filasSalidas.forEach(fila => {
+                const fechaFin = fila.getAttribute('data-fecha');
+                fila.style.display = fechaFin === fechaFiltroFormateada ? '' : 'none';
+            });
+        }
+
+        function mostrarLlegadas() {
+            document.getElementById('tablaLlegadas').style.display = '';
+            document.getElementById('tablaSalidas').style.display = 'none';
+            aplicarFiltroFecha(); // Aplicar el filtro a las llegadas
+        }
+
+        function mostrarSalidas() {
+            document.getElementById('tablaLlegadas').style.display = 'none';
+            document.getElementById('tablaSalidas').style.display = '';
+            aplicarFiltroFecha(); // Aplicar el filtro a las salidas
+        }
+
+        // Función para formatear la fecha de yyyy-mm-dd a dd/MM/yyyy
+        function formatearFecha(fecha) {
+            const [year, month, day] = fecha.split('-');
+            return `${day}/${month}/${year}`; // Retornar en formato dd/MM/yyyy
+        }
+    </script>
+
+</body>
+</html>

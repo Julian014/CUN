@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoja de Vida de {{employee.name}}</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 70%;
+            margin: 20px auto;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #90c9a7;
+            margin-bottom: 20px;
+        }
+        .info-section {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .info-section h2 {
+            color: #90c9a7;
+            border-bottom: 2px solid #90c9a7;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        .info-section p, .info-section input, .info-section textarea {
+            font-size: 16px;
+            margin: 5px 0;
+            color: #555;
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .info-section input:disabled, .info-section textarea:disabled {
+            background-color: #e9ecef;
+        }
+        .contact-details, .job-details {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .contact-details div, .job-details div {
+            width: 45%;
+        }
+        .btn {
+            background-color: #90c9a7;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin: 10px;
+        }
+        .btn:hover {
+            background-color: #72b08f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hoja de Vida de {{employee.name}}</h1>
+        <form action="/update_employee" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="{{employee.id}}">
+            <img src="{{employee.fotoURL}}" alt="Foto de {{employee.name}}" class="profile-photo">
+            <input type="file" name="foto" disabled>
+
+            <div class="info-section contact-details">
+                <div>
+                    <h2>Información de Contacto</h2>
+                    <input type="email" name="email" value="{{employee.email}}" required disabled>
+                    <input type="text" name="phone_number" value="{{employee.phone_number}}"  disabled>
+                </div>
+                <div>
+                    <h2>Detalles Personales</h2>
+                    <input type="text" name="name" value="{{employee.name}}" required disabled>
+                </div>
+            </div>
+
+            <div class="info-section job-details">
+                <div>
+                    <h2>Información Laboral</h2>
+                    <input type="text" name="cargo" value="{{employee.cargo}}" required disabled>
+                </div>
+              
+            </div>
+
+            <button type="button" class="btn" id="editBtn">Editar</button>
+            <button type="submit" class="btn" id="saveBtn" style="display: none;">Guardar Cambios</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('editBtn').addEventListener('click', function() {
+            const inputs = document.querySelectorAll('.info-section input, .info-section textarea');
+            inputs.forEach(input => input.disabled = false);
+            document.querySelector('input[type="file"]').disabled = false;
+            document.getElementById('saveBtn').style.display = 'inline-block';
+            this.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

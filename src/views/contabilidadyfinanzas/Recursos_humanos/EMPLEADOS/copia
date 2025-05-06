@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Empleados</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .filters, .hoja-vida {
+            width: 45%;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background: #413d4b;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #333;
+        }
+        .hoja-vida {
+            background: #d9d9d9;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="filters">
+            <h2>Filtros</h2>
+            <input type="text" id="search" placeholder="Buscar por nombre...">
+            <select id="empleados-list">
+                <option value="">Seleccione un empleado</option>
+            </select>
+            <button onclick="buscarEmpleado()">Buscar</button>
+        </div>
+        <div id="detalle-empleado" class="hoja-vida">
+            <h2>Hoja de Vida</h2>
+            <p><strong>Nombre:</strong> <span id="emp-name"></span></p>
+            <p><strong>Email:</strong> <span id="emp-email"></span></p>
+            <p><strong>Cargo:</strong> <span id="emp-cargo"></span></p>
+            <p><strong>Teléfono:</strong> <span id="emp-phone"></span></p>
+            <p><strong>Ciudad:</strong> <span id="emp-ciudad"></span></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const lista = document.getElementById('empleados-list');
+            const search = document.getElementById('search');
+            let empleados = [];
+
+            fetch('/api/empleados')
+                .then(res => res.json())
+                .then(data => {
+                    empleados = data;
+                    llenarLista(empleados);
+                })
+                .catch(error => console.error("Error al cargar empleados:", error));
+
+            function llenarLista(data) {
+                lista.innerHTML = '<option value="">Seleccione un empleado</option>';
+                data.forEach(emp => {
+                    let option = document.createElement('option');
+                    option.value = emp.id;
+                    option.textContent = emp.name;
+                    lista.appendChild(option);
+                });
+            }
+
+            search.addEventListener('input', () => {
+                const query = search.value.toLowerCase();
+                const filtered = empleados.filter(emp =>
+                    emp.name.toLowerCase().includes(query)
+                );
+                llenarLista(filtered);
+            });
+        });
+
+        function buscarEmpleado() {
+            const id = document.getElementById('empleados-list').value;
+            if (!id) return;
+
+            fetch(`/api/empleado/${id}`)
+                .then(res => res.json())
+                .then(emp => {
+                    document.getElementById('emp-name').innerText = emp.name;
+                    document.getElementById('emp-email').innerText = emp.email;
+                    document.getElementById('emp-cargo').innerText = emp.cargo;
+                    document.getElementById('emp-phone').innerText = emp.phone_number;
+                    document.getElementById('emp-ciudad').innerText = emp.ciudad;
+                    document.getElementById('detalle-empleado').style.display = 'block';
+                })
+                .catch(error => console.error("Error al obtener empleado:", error));
+        }
+    </script>
+</body>
+</html>
