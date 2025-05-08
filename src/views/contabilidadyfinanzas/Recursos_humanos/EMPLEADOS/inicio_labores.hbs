@@ -1,298 +1,200 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio de Labores</title>
-    <style>
-        /* Reset básico */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio de Labores</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f5f7fa;
+      font-family: 'Inter', sans-serif;
+    }
 
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
+    .card {
+      max-width: 500px;
+      margin: 100px auto;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      background: #fff;
+    }
 
-.cuerpo {
-        align-items: center;
-            justify-content: center;
-         display: flex;
+    .card-header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #056734;
+    }
 
-}
+    .card-header p {
+      color: #6c757d;
+      margin-bottom: 1rem;
+    }
 
+    .btn-iniciar, .btn-finalizar {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
 
+    .btn-iniciar {
+      background-color: #056734;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
 
+    .btn-iniciar:hover {
+      background-color: #045129;
+    }
 
+    .btn-finalizar {
+      background-color: #94BD0D;
+      color: #fff;
+    }
 
-        .card {
-            position: relative;
-            background: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 100%;
-            padding: 20px;
-            text-align: center;
-            left: 20%;
-        }
+    .btn-finalizar:hover {
+      background-color: #7ca800;
+    }
 
-        .card-header {
-            margin-bottom: 20px;
-        }
+    .btn-flotante {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background-color: #fff;
+      border: 2px solid #056734;
+      border-radius: 50%;
+      padding: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
+    }
 
-        .card-header h1 {
-            font-size: 22px;
-            color: #333333;
-            margin-bottom: 5px;
-        }
+    .btn-flotante:hover {
+      background-color: #f1f3f5;
+    }
 
-        .card-header p {
-            font-size: 14px;
-            color: #666666;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 15px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #ffffff;
-            background-color: #90c9a7;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #d9d9d9;
-        }
-
-        button:disabled {
-            background-color: #e0e0e0;
-            color: #a1a1a1;
-            cursor: not-allowed;
-        }
-
-        .btn-finalizar {
-            background-color: #d32f2f;
-        }
-
-        .btn-finalizar:hover {
-            background-color: #a71f1f;
-        }
-
-        .info-text {
-            font-size: 14px;
-            color: #666666;
-            margin-top: 10px;
-        }
-
-        /* Estilo responsivo */
-        @media (max-width: 480px) {
-            .card-header h1 {
-                font-size: 20px;
-            }
-
-            button {
-                font-size: 14px;
-                padding: 10px;
-            }
-        }
-
-       
-
-header {
-background-color: #ffffff;
-padding: 15px 30px;
-display: -webkit-box;
-display: -ms-flexbox;
-display: flex;
--webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-        justify-content: space-between;
--webkit-box-align: center;
-    -ms-flex-align: center;
-        align-items: center;
--webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-position: fixed;
-width: 100%;
-top: 0;
-z-index: 1000;
-}
-
-#logo, #vigilado {
-max-width: 120px;
-height: auto;
-}
-
-      /* Botón flotante circular */
-        .btn-flotante {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 80px;
-            height: 80px;
-            border: none;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform 0.2s;
-            background: none; /* Elimina el fondo */
-            box-shadow: none; /* Elimina el sombreado */
-        }
-
-        .btn-flotante:hover {
-            transform: scale(1.1);
-        }
-
-        /* Ícono dentro del botón */
-        .btn-flotante img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-    </style>
-
+    .btn-flotante img {
+      width: 32px;
+      height: 32px;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <img id="logo" src="imagenes/logo vianco.png" alt="Nexus Logo">
-        <img id="vigilado" src="imagenes/vigilado.png" alt="Vigilado Logo">
-    </header>
-    <br><br><br><br><br><br><br><br><br>
-    <div class="cuerpo">
-        <div class="card">
-            <div class="card-header">
-                <h1>Bienvenido, {{nombreUsuario}}</h1>
-                <p>Selecciona una acción para continuar:</p>
-            </div>
-            <div class="card-body">
-                <!-- Formulario para iniciar turno -->
-                <form id="form-iniciar">
-                    <input type="hidden" name="user_id" value="{{userId}}">
-                    <input type="hidden" name="latitud">
-                    <input type="hidden" name="longitud">
-                    {{#if mostrarBotonIniciar}}
-                    <button type="submit" class="btn-iniciar">Iniciar Turno</button>
-                    <br>
-                    {{else}}
-                    <p>Ya has iniciado un turno hoy.</p>
-                    {{/if}}
-                </form>
-                <div id="mensaje-turno-iniciar"></div>
 
-                <!-- Formulario para finalizar turno -->
-                <form id="form-finalizar">
-                    <input type="hidden" name="user_id" value="{{userId}}">
-                    <input type="hidden" name="latitud">
-                    <input type="hidden" name="longitud">
-                    {{#if mostrarBotonFinalizar}}
-                    <button type="submit" class="btn-finalizar">Finalizar Turno</button>
-                    <br><br>
-                    {{else}}
-                    <p>El turno ya ha sido cerrado o no se ha iniciado.</p>
-                    {{/if}}
-                </form>
-                <div id="mensaje-turno-finalizar"></div>
-            </div>
-        </div>
+  <div class="card">
+    <div class="card-header text-center">
+      <h1>Bienvenido, {{nombreUsuario}}</h1>
+      <p>Selecciona una acción para continuar:</p>
     </div>
+    <div class="card-body">
+      <!-- Formulario para iniciar turno -->
+      <form id="form-iniciar">
+        <input type="hidden" name="user_id" value="{{userId}}">
+        <input type="hidden" name="latitud">
+        <input type="hidden" name="longitud">
 
-    <button class="btn-flotante" onclick="window.location.href='/reportar-error';">
-        <img src="imagenes/chatbot-removebg-preview.png" alt="Icono Reportar">
-    </button>
+        <!-- Mostrar botón si el turno no ha sido iniciado -->
+        {{#if mostrarBotonIniciar}} 
+          <button type="submit" class="btn-iniciar">Iniciar Turno</button>
+        {{else}}
+          <p class="text-success">Ya has iniciado un turno hoy.</p>
+        {{/if}}
+      </form>
 
-    <script>
-        // Función para obtener la ubicación y enviar el formulario
-        function enviarFormulario(url, form) {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(async function (position) {
-                    const latitud = position.coords.latitude;
-                    const longitud = position.coords.longitude;
+      <!-- Formulario para finalizar turno -->
+      <form id="form-finalizar">
+        <input type="hidden" name="user_id" value="{{userId}}">
+        <input type="hidden" name="latitud">
+        <input type="hidden" name="longitud">
 
-                    form.querySelector('input[name="latitud"]').value = latitud;
-                    form.querySelector('input[name="longitud"]').value = longitud;
+        <!-- Mostrar botón si el turno ha sido iniciado pero no finalizado -->
+        {{#if mostrarBotonFinalizar}} 
+          <button type="submit" class="btn-finalizar">Finalizar Turno</button>
+        {{else}}
+          <p class="text-danger">El turno ya ha sido cerrado o no se ha iniciado.</p>
+        {{/if}}
+      </form>
+    </div>
+  </div>
 
-                    const formData = new FormData(form);
+  <!-- Botón flotante para reportar error -->
+  <button class="btn-flotante" title="Reportar error">
+    <img src="/imagenes/chatbot-removebg-preview.png" alt="Icono Reportar">
+  </button>
 
-                    try {
-                        const response = await fetch(url, {
-                            method: 'POST',
-                            body: JSON.stringify(Object.fromEntries(formData)),
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        });
+  <script>
+    // Función para enviar formularios con la ubicación
+    function enviarFormulario(url, form) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async function (position) {
+          const latitud = position.coords.latitude;
+          const longitud = position.coords.longitude;
 
-                        const result = await response.json();
+          form.querySelector('input[name="latitud"]').value = latitud;
+          form.querySelector('input[name="longitud"]').value = longitud;
 
-                        if (response.ok) {
-                            alert(result.message || "Acción realizada con éxito.");
-                            window.location.reload();
-                        } else {
-                            alert(result.error || "Hubo un error al procesar la solicitud.");
-                        }
-                    } catch (error) {
-                        console.error(error);
-                        alert("Error en el servidor.");
-                    }
-                }, function () {
-                    alert("Error al obtener la ubicación.");
-                });
+          const formData = new FormData(form);
+
+          try {
+            const response = await fetch(url, {
+              method: 'POST',
+              body: JSON.stringify(Object.fromEntries(formData)),
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              alert(result.message || "Acción realizada con éxito.");
+              window.location.reload();
             } else {
-                alert("Geolocalización no soportada en este dispositivo.");
+              alert(result.error || "Hubo un error al procesar la solicitud.");
             }
-        }
-
-        // Manejar el envío del formulario de inicio de turno
-        document.getElementById('form-iniciar').addEventListener('submit', function (e) {
-            e.preventDefault();
-            enviarFormulario('/turnos/iniciar', this);
+          } catch (error) {
+            console.error(error);
+            alert("Error en el servidor.");
+          }
+        }, function () {
+          alert("Error al obtener la ubicación.");
         });
+      } else {
+        alert("Geolocalización no soportada en este dispositivo.");
+      }
+    }
 
-        // Manejar el envío del formulario de cierre de turno
-        document.getElementById('form-finalizar').addEventListener('submit', function (e) {
-            e.preventDefault();
-            enviarFormulario('/turnos/cerrar', this);
+    // Manejar el envío del formulario de inicio de turno
+    document.getElementById('form-iniciar').addEventListener('submit', function (e) {
+      e.preventDefault();
+      enviarFormulario('/turnos/iniciar', this);
+    });
+
+    // Manejar el envío del formulario de cierre de turno
+    document.getElementById('form-finalizar').addEventListener('submit', function (e) {
+      e.preventDefault();
+      enviarFormulario('/turnos/cerrar', this);
+    });
+
+    // Función para enviar ubicación por WhatsApp
+    document.querySelector('.btn-flotante').addEventListener('click', function () {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          let mensaje = `Estoy presentando error con mi inicio o cierre de turno. Comparto ubicación para garantizar mi punto geográfico.`;
+          let numeroWhatsapp = "+573156703770";
+          let url = `https://wa.me/${numeroWhatsapp}?text=${encodeURIComponent(mensaje)}`;
+          window.location.href = url;
+        }, function () {
+          alert("No se pudo obtener la ubicación.");
         });
-
-        // Función para enviar ubicación por WhatsApp
-        function enviarUbicacionWhatsApp() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    let latitud = position.coords.latitude;
-                    let longitud = position.coords.longitude;
-
-                    let mensaje = `Estoy presentando error con mi inicio o cierre de turno. Comparto ubicación para garantizar mi punto geográfico.`;
-                    let numeroWhatsapp = "+573156703770";
-                    let url = `https://wa.me/${numeroWhatsapp}?text=${encodeURIComponent(mensaje)}`;
-
-                    window.location.href = url;
-                }, function () {
-                    alert("No se pudo obtener la ubicación.");
-                });
-            } else {
-                alert("La geolocalización no está disponible en este navegador.");
-            }
-        }
-
-        // Asignar la función al botón flotante
-        document.querySelector('.btn-flotante').addEventListener('click', enviarUbicacionWhatsApp);
-    </script>
+      } else {
+        alert("La geolocalización no está disponible en este navegador.");
+      }
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

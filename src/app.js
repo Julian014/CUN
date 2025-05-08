@@ -375,34 +375,35 @@ app.post('/guardar_turno', (req, res) => {
 
 
 
-
 app.get('/inicio_labores', async (req, res) => {
     if (req.session.loggedin === true) {
         const nombreUsuario = req.session.name;
         const userId = req.session.userId;
 
         try {
-            // Obtener la fecha local actual en formato YYYY-MM-DD
             const hoy = new Date();
             const fechaLocal = hoy.toLocaleDateString('en-GB').split('/').reverse().join('-'); // Formato YYYY-MM-DD
 
-            console.log("Fecha actual: ", fechaLocal); // Agrega esta línea para depurar la fecha
+            console.log("Fecha actual:", fechaLocal); // Verificar la fecha actual
 
-            // Verificar si el usuario ya inició un turno hoy
             const [turnoIniciado] = await pool.promise().query(
-                "SELECT COUNT(*) AS count FROM registros_turnos WHERE user_id = ? AND DATE(fecha_inicio) = ?",
+                "SELECT COUNT(*) AS count FROM registro_estudiantes WHERE user_id = ? AND DATE(fecha_inicio) = ?",
                 [userId, fechaLocal]
             );
 
-            // Verificar si el usuario ya cerró el turno hoy
             const [turnoCerrado] = await pool.promise().query(
-                "SELECT COUNT(*) AS count FROM registros_turnos WHERE user_id = ? AND DATE(fecha_inicio) = ? AND fecha_cierre IS NOT NULL",
+                "SELECT COUNT(*) AS count FROM registro_estudiantes WHERE user_id = ? AND DATE(fecha_inicio) = ? AND fecha_cierre IS NOT NULL",
                 [userId, fechaLocal]
             );
 
-            // Determinar si los botones deben mostrarse o no
-            const mostrarBotonIniciar = turnoIniciado[0].count === 0; // Solo si no se inició un turno hoy
-            const mostrarBotonFinalizar = turnoIniciado[0].count > 0 && turnoCerrado[0].count === 0; // Si se inició pero no se cerró
+            console.log("Turno iniciado:", turnoIniciado[0].count);
+            console.log("Turno cerrado:", turnoCerrado[0].count);
+
+            const mostrarBotonIniciar = turnoIniciado[0].count === 0; // Si no se ha iniciado un turno hoy
+            const mostrarBotonFinalizar = turnoIniciado[0].count > 0 && turnoCerrado[0].count === 0; // Si se ha iniciado pero no se ha cerrado
+
+            console.log("mostrarBotonIniciar:", mostrarBotonIniciar);
+            console.log("mostrarBotonFinalizar:", mostrarBotonFinalizar);
 
             res.render('contabilidadyfinanzas/Recursos_humanos/EMPLEADOS/inicio_labores.hbs', {
                 nombreUsuario,
@@ -411,8 +412,8 @@ app.get('/inicio_labores', async (req, res) => {
                 mostrarBotonIniciar,
                 mostrarBotonFinalizar,
                 role: req.session.role
-
             });
+
         } catch (error) {
             console.error("Error al verificar registros de turnos:", error);
             res.status(500).send("Error en el servidor.");
@@ -421,8 +422,6 @@ app.get('/inicio_labores', async (req, res) => {
         res.redirect("/");
     }
 });
-
-
 
 
 
@@ -451,7 +450,6 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
 
 
-
 app.post("/turnos/:action", async (req, res) => {
     const { action } = req.params;
     const { user_id, latitud, longitud } = req.body;
@@ -462,7 +460,7 @@ app.post("/turnos/:action", async (req, res) => {
 
     try {
         const [turnoConfig] = await pool.promise().query(
-            "SELECT latitud, longitud, rango, martes_entrada FROM turnos WHERE user_id = ?",
+            "SELECT latitud, longitud, rango, martes_entrada FROM horario_estudiantes WHERE user_id = ?",
             [user_id]
         );
 
@@ -487,13 +485,17 @@ app.post("/turnos/:action", async (req, res) => {
             });
         }
 
-        const timestamp = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Bogota" }));
-        const hoy = timestamp.toISOString().split("T")[0]; // Fecha en formato YYYY-MM-DD
+        // Obtener fecha y hora actual en Bogotá
+        const timestamp = new Date(); // Hora y fecha local en Bogotá
+        const hoy = timestamp.toLocaleDateString("en-GB").split('/').reverse().join('-'); // Fecha en formato YYYY-MM-DD
         const horaActual = timestamp.toTimeString().split(" ")[0]; // Hora en formato HH:MM:SS
         
+        console.log("Fecha actual:", hoy);  // Depuración
+        console.log("Hora actual:", horaActual);  // Depuración
+
         if (action === "iniciar") {
             const [turnoHoy] = await pool.promise().query(
-                "SELECT COUNT(*) AS count FROM registros_turnos WHERE user_id = ? AND DATE(fecha_inicio) = ?",
+                "SELECT COUNT(*) AS count FROM registro_estudiantes WHERE user_id = ? AND DATE(fecha_inicio) = ?",
                 [user_id, hoy]
             );
 
@@ -504,14 +506,14 @@ app.post("/turnos/:action", async (req, res) => {
             }
 
             await pool.promise().query(
-                "INSERT INTO registros_turnos (user_id, fecha_inicio, hora_inicio) VALUES (?, ?, ?)",
+                "INSERT INTO registro_estudiantes (user_id, fecha_inicio, hora_inicio) VALUES (?, ?, ?)",
                 [user_id, hoy, horaActual]
             );
 
             return res.json({ message: "Turno iniciado correctamente." });
         } else if (action === "cerrar") {
             const [turnoIniciado] = await pool.promise().query(
-                "SELECT fecha_inicio, hora_inicio FROM registros_turnos WHERE user_id = ? AND fecha_cierre IS NULL",
+                "SELECT fecha_inicio, hora_inicio FROM registro_estudiantes WHERE user_id = ? AND fecha_cierre IS NULL",
                 [user_id]
             );
 
@@ -519,7 +521,6 @@ app.post("/turnos/:action", async (req, res) => {
                 return res.status(400).json({ error: "No hay turno iniciado para cerrar." });
             }
 
-       
             const horaInicio = new Date(`${hoy}T${turnoIniciado[0].hora_inicio}`);
 
             // Hora actual (hora de cierre)
@@ -534,7 +535,7 @@ app.post("/turnos/:action", async (req, res) => {
 
             // Actualizar en la base de datos
             const [updateResult] = await pool.promise().query(
-                "UPDATE registros_turnos SET fecha_cierre = ?, hora_final = ?, horas = ?, minutos_extra = ? WHERE user_id = ? AND fecha_cierre IS NULL",
+                "UPDATE registro_estudiantes SET fecha_cierre = ?, hora_final = ?, horas = ?, minutos_extra = ? WHERE user_id = ? AND fecha_cierre IS NULL",
                 [hoy, horaActual, horasTrabajadas, minutosTrabajados, user_id]
             );
 
@@ -558,7 +559,7 @@ app.get('/reporte_horario', (req, res) => {
     if (req.session.loggedin === true) {
         const nombreUsuario = req.session.name;
 
-        // Consulta para obtener todos los datos de registros_turnos junto con el nombre del usuario
+        // Consulta para obtener todos los datos de registro_estudiantes  junto con el nombre del usuario
         const query = `
             SELECT 
                 rt.id,
@@ -569,7 +570,7 @@ app.get('/reporte_horario', (req, res) => {
                 rt.horas,
                 rt.hora_inicio,
                 rt.hora_final
-            FROM registros_turnos rt
+            FROM registro_estudiantes  rt
             INNER JOIN usuarios_cun u ON rt.user_id = u.id -- Relación entre las tablas
             ORDER BY rt.fecha_inicio DESC;
         `;
@@ -636,7 +637,7 @@ app.post('/estadisticas_horario', (req, res) => {
                 hora_inicio,
                 hora_final
             FROM 
-                registros_turnos
+                registro_estudiantes 
             WHERE 
                 fecha_inicio BETWEEN ? AND ?;
         `, [fechaInicio, fechaFin], (err, registros) => {
