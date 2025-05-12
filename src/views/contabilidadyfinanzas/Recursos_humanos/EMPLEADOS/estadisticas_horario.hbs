@@ -1,224 +1,189 @@
-<!-- Estilos CSS añadidos -->
-<style>
-    body {
+<!-- Estilos necesarios -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-        font-family: 'Arial', sans-serif;
-        background-color: #f4f7fc;
-        margin: 0;
-        padding: 0;
-    }
+<!-- Layout principal -->
+{{!-- layout: principal --}}
+<div class="container-fluid px-4 py-4">
+  <!-- Encabezado -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="text-primary fw-bold mb-0"><i class="fas fa-university me-2"></i>Panel de Asistencia</h2>
+      <small class="text-muted">Fecha actual: {{fechaActual}}</small>
+    </div>
+    <form class="d-flex" role="search" style="max-width: 300px;">
+      <input class="form-control me-2" type="search" placeholder="Buscar estudiante">
+      <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
+    </form>
+  </div>
 
-    /* Estilos generales del contenedor */
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    /* Estilos de los botones de navegación */
-    .button-container {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    }
-    .button-container a {
-        text-decoration: none;
-    }
-    .button-container button {
-        background-color: #90c9a7;
-        color: white;
-        padding: 12px 20px;
-        font-size: 16px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-    .button-container button:hover {
-        background-color: #d9d9d9;
-        transform: translateY(-3px);
-    }
+  <!-- Filtros -->
+  <div class="mb-4">
+    <select class="form-select w-auto d-inline-block me-3">
+      <option selected>📚 Todas las facultades</option>
+      <option>Ingeniería</option>
+      <option>Contaduría</option>
+      <option>Derecho</option>
+    </select>
+    <select class="form-select w-auto d-inline-block">
+      <option selected>🕒 Todas las jornadas</option>
+      <option>Diurna</option>
+      <option>Nocturna</option>
+    </select>
+  </div>
 
-    .button-container button:focus {
-        outline: none;
-    }
+  <!-- Métricas -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-3" data-aos="zoom-in">
+      <div class="card border-0 shadow text-center">
+        <div class="card-body">
+          <i class="fas fa-user-graduate fa-2x text-info mb-2"></i>
+          <h6 class="text-muted">Estudiante más puntual</h6>
+          <h5 class="fw-bold">Andrea López</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3" data-aos="zoom-in">
+      <div class="card border-0 shadow text-center">
+        <div class="card-body">
+          <i class="fas fa-star fa-2x text-warning mb-2"></i>
+          <h6 class="text-muted">Mejor asistencia</h6>
+          <h5 class="fw-bold">98%</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3" data-aos="zoom-in">
+      <div class="card border-0 shadow text-center">
+        <div class="card-body">
+          <i class="fas fa-bell fa-2x text-danger mb-2"></i>
+          <h6 class="text-muted">Alertas generadas</h6>
+          <h5 class="fw-bold">12</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3" data-aos="zoom-in">
+      <div class="card border-0 shadow text-center">
+        <div class="card-body">
+          <i class="fas fa-envelope fa-2x text-success mb-2"></i>
+          <h6 class="text-muted">Correos enviados</h6>
+          <h5 class="fw-bold">5</h5>
+        </div>
+      </div>
+    </div>
+  </div>
 
-.button-container button.active {
-    background-color: #d9d9d9; /* Un tono más oscuro */
-    transform: translateY(3px); /* Simula estar presionado */
-    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra interna */
-}
+  <!-- Gráfico -->
+  <div class="card shadow mb-5" data-aos="fade-up">
+    <div class="card-header fw-semibold bg-light">Desempeño de la Semana</div>
+    <div class="card-body">
+      <canvas id="graficoDesempeno"></canvas>
+    </div>
+  </div>
 
-.button-container a.active button {
-    background-color: #0056b3; /* Un tono más oscuro */
-    transform: translateY(3px); /* Simula estar presionado */
-    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra interna */
-}
-</style>
+  <!-- Alertas -->
+  <div class="card shadow mb-5" data-aos="fade-up">
+    <div class="card-header bg-light fw-semibold">Alertas Automatizadas Recientes</div>
+    <div class="card-body">
+      <ul class="timeline">
+        <li><span class="badge bg-warning">📧</span> Correo enviado a <em>Daniel Torres</em> por 2 fallas consecutivas.</li>
+        <li><span class="badge bg-success">✅</span> <em>Lucía Romero</em> ingresó correctamente.</li>
+        <li><span class="badge bg-danger">⚠️</span> <em>Andrés Ríos</em> no ha ingresado en 3 días.</li>
+      </ul>
+    </div>
+  </div>
 
-<style>
-    .stats-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #6c757d; /* Color gris oscuro */
-        color: white;
-        padding: 12px 20px;
-        font-size: 16px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-    }
+  <!-- Tabla -->
+  <div class="card shadow mb-5" data-aos="fade-up">
+    <div class="card-header bg-primary text-white fw-semibold">Historial de Estudiantes</div>
+    <div class="card-body table-responsive">
+      <table class="table table-bordered table-hover text-center align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th><th>Nombre</th><th>Último Ingreso</th><th>Asistencias</th><th>Fallas</th><th>Estado</th><th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td><td>Daniel Torres</td><td>2025-05-10 08:05</td><td>14</td><td>2</td>
+            <td><span class="badge bg-danger">En riesgo</span></td>
+            <td>
+              <button class="btn btn-sm btn-warning" onclick="mostrarModal()">📧 Correo</button>
+              <button class="btn btn-sm btn-info">📊 Historial</button>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td><td>Ana Morales</td><td>2025-05-12 07:55</td><td>20</td><td>0</td>
+            <td><span class="badge bg-success">Activo</span></td>
+            <td><button class="btn btn-sm btn-info">📊 Historial</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-    .stats-button:hover {
-        background-color: #5a6268; /* Color más oscuro al pasar el mouse */
-        transform: translateY(-3px);
-    }
-
-    .stats-button i {
-        margin-right: 8px; /* Espaciado entre el ícono y el texto */
-        font-size: 18px;
-    }
-</style>
-
-
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-<!-- Contenedor principal -->
-<div class="container">
-    <!-- Botones de navegación -->
-<div class="button-container">
-    <a href="/reporte_horario">
-        <button class="active" type="button">Horarios Ejecutivos</button>
-    </a>
-    <a href="/registrollegadas">
-        <button type="button">Horarios Administrativo</button>
-    </a>
-    <a href="/estadisticas_horario">
-        <button type="button" class="stats-button">
-            <i class="fa fa-chart-bar"></i> Estadísticas
-        </button>
-    </a>
+  <!-- Modal -->
+  <div class="modal fade" id="modalCorreo" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content shadow">
+        <div class="modal-header">
+          <h5 class="modal-title">Correo Enviado</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p>Se ha notificado al estudiante solicitando explicación de sus inasistencias.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
+<!-- Estilos timeline -->
+<style>
+  ul.timeline { list-style: none; padding-left: 0; }
+  ul.timeline li { margin-bottom: 1rem; padding-left: 1.5rem; position: relative; }
+  ul.timeline li::before {
+    content: ''; width: 10px; height: 10px;
+    background-color: #6c757d; border-radius: 50%;
+    position: absolute; left: 0; top: 6px;
+  }
+</style>
 
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init();
 
+  function mostrarModal() {
+    const modal = new bootstrap.Modal(document.getElementById('modalCorreo'));
+    modal.show();
+  }
 
-    {{#if navopertaivo}}
-    <nav>
-        <h1>Bienvenido, {{nombreUsuario}}</h1>
-    </nav>
-    {{/if}}
-
-    <main>
-        <h2>Estadísticas de Horarios</h2>
-
-        <!-- Formulario para seleccionar el rango de fechas -->
-<form id="rangoFechasForm" action="/estadisticas_horario" method="POST">
-    <label for="fechaInicio">Fecha Inicio:</label>
-    <input type="date" id="fechaInicio" name="fechaInicio" value="{{fechaInicio}}" required>
-
-    <label for="fechaFin">Fecha Fin:</label>
-    <input type="date" id="fechaFin" name="fechaFin" value="{{fechaFin}}" required>
-
-    <button type="submit">Consultar</button>
-</form>
-
-
-        <!-- Tabla de resultados -->
-     <table id="resultadosTabla" border="1">
-    <thead>
-        <tr>
-            <th>ID Usuario</th>
-            <th>Fecha</th>
-            <th>Horas Trabajadas (Diarias)</th>
-            <th>Total Horas Trabajadas</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#each registros}}
-        <tr>
-            <td>{{this.user_id}}</td>
-            <td>{{this.fecha_inicio}}</td>
-            <td class="horas-diarias"></td> <!-- Aquí se calcularán las horas diarias -->
-            <td class="total-horas"></td>   <!-- Aquí se calcularán las horas totales por usuario -->
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
-    </main>
-
-    <script>
-        // Función para calcular la diferencia entre dos horas
-      // Función para calcular la diferencia entre dos horas
-function calcularHoras(horaInicio, horaFinal) {
-    const inicio = horaInicio.split(':');
-    const fin = horaFinal.split(':');
-
-    const inicioDate = new Date(1970, 0, 1, inicio[0], inicio[1], inicio[2]);
-    const finDate = new Date(1970, 0, 1, fin[0], fin[1], fin[2]);
-
-    // Si la hora de finalización es menor que la de inicio, asumimos que el trabajo pasó de un día a otro
-    if (finDate < inicioDate) {
-        finDate.setDate(finDate.getDate() + 1);
+  const ctx = document.getElementById('graficoDesempeno');
+  new Chart(ctx, {
+    data: {
+      labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie'],
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Ingresos',
+          data: [122, 130, 128, 127, 132],
+          backgroundColor: '#0d6efd'
+        },
+        {
+          type: 'line',
+          label: 'Promedio Acumulado',
+          data: [120, 125, 126, 127, 128],
+          borderColor: 'orange',
+          borderWidth: 2,
+          tension: 0.4
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'bottom' } }
     }
-
-    return (finDate - inicioDate) / 1000 / 60 / 60; // Devuelve el valor en horas
-}
-        // Procesar los datos y realizar los cálculos
-function procesarDatos(registros) {
-    const horasTotalesPorUsuario = {};
-
-    registros.forEach(registro => {
-        const horasTrabajadas = calcularHoras(registro.hora_inicio, registro.hora_final);
-        const fecha = new Date(registro.fecha_inicio);
-        const userId = registro.user_id;
-
-        // Calcular horas diarias
-        const filas = document.querySelectorAll('#resultadosTabla tbody tr');
-        filas.forEach(fila => {
-            if (fila.cells[0].textContent === String(userId) && fila.cells[1].textContent === fecha.toISOString().split('T')[0]) {
-                fila.querySelector('.horas-diarias').textContent = horasTrabajadas.toFixed(2);
-            }
-        });
-
-        // Calcular total de horas por usuario
-        if (!horasTotalesPorUsuario[userId]) {
-            horasTotalesPorUsuario[userId] = 0;
-        }
-        horasTotalesPorUsuario[userId] += horasTrabajadas;
-    });
-
-    // Mostrar el total de horas trabajadas por usuario
-    const filas = document.querySelectorAll('#resultadosTabla tbody tr');
-    filas.forEach(fila => {
-        const userId = fila.cells[0].textContent;
-        if (horasTotalesPorUsuario[userId]) {
-            fila.querySelector('.total-horas').textContent = horasTotalesPorUsuario[userId].toFixed(2);
-        }
-    });
-}
-
-
-        // Obtener los datos desde el backend
-        document.addEventListener('DOMContentLoaded', () => {
-            const registros = {{json registros}}; // Handlebars pasa los registros a JavaScript
-
-            // Procesar los datos al cargar la página
-            procesarDatos(registros);
-
-            // Filtrar por fecha cuando se envíe el formulario
-            document.getElementById('rangoFechasForm').addEventListener('submit', function (e) {
-                e.preventDefault();
-                const fechaInicio = document.getElementById('fechaInicio').value;
-                const fechaFin = document.getElementById('fechaFin').value;
-
-                const registrosFiltrados = registros.filter(registro => {
-                    const fecha = new Date(registro.fecha_inicio);
-                    return fecha >= new Date(fechaInicio) && fecha <= new Date(fechaFin);
-                });
-
-                procesarDatos(registrosFiltrados);
-            });
-        });
-    </script>
-
+  });
+</script>

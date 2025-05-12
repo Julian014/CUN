@@ -97,6 +97,7 @@ app.get("/login", (req, res) => {
 });
 
 
+const handlebars = require('handlebars');
 
 
 
@@ -105,7 +106,9 @@ hbs.registerHelper('eq', (a, b) => a == b);
 
 
 
-
+handlebars.registerHelper('json', function(context) {
+  return JSON.stringify(context);
+});
 
 // Ruta de autenticación
 app.post("/auth", (req, res) => {
@@ -615,7 +618,11 @@ app.get('/api/horarios/:diaSemana/:userId', (req, res) => {
 app.get('/estadisticas_horario', (req, res) => {
     if (req.session.loggedin === true) {
         const nombreUsuario = req.session.name;
-        res.render('contabilidadyfinanzas/Recursos_humanos/EMPLEADOS/estadisticas_horario.hbs', { navopertaivo: true, nombreUsuario });
+        res.render('contabilidadyfinanzas/Recursos_humanos/EMPLEADOS/estadisticas_horario.hbs', { 
+             nombreUsuario,
+             layout: "principal",
+            role: req.session.role
+ });
     } else {
         res.redirect('/');
     }
